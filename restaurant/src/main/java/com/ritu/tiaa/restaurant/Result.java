@@ -14,7 +14,6 @@ public class Result {
 
 	public Result() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Result(CMFoodChain cmfoodchain) {

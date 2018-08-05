@@ -5,35 +5,37 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ritu.tiaa.restaurant.Files;
 import com.ritu.tiaa.restaurant.JSONFiles;
 import com.ritu.tiaa.restaurant.XMLFiles;
 
 /**
- * Hello world!
+ * TIAA assignment
+ * 
+ * @author rraj
  *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-    	Files xmlfile = new  XMLFiles();
-    	BranchOrderDetails branchOrderDetailsForXML = xmlfile.readFile("src/main/java/com/ritu/tiaa/testdata/BOM-1234.xml");
-        Files jsonFiles = new  JSONFiles();
-        BranchOrderDetails branchOrderDetailsForJSON = jsonFiles.readFile("src/main/java/com/ritu/tiaa/testdata/BOM-4567.json");
-        processFilesAndGenerateResult(branchOrderDetailsForXML,branchOrderDetailsForJSON);
-        System.out.println("Success");
-    }
+
+public class FinanceDepartmentValidationEngine {
+
+	static Logger logger = Logger.getLogger(XMLFiles.class);
+
+	public static void main(String[] args) {
+		Files xmlfile = new XMLFiles();
+		BranchOrderDetails branchOrderDetailsForXML = xmlfile
+				.readFile("src/main/java/com/ritu/tiaa/testdata/BOM-1234.xml");
+		Files jsonFiles = new JSONFiles();
+		BranchOrderDetails branchOrderDetailsForJSON = jsonFiles
+				.readFile("src/main/java/com/ritu/tiaa/testdata/BOM-4567.json");
+		processFilesAndGenerateResult(branchOrderDetailsForXML, branchOrderDetailsForJSON);
+	}
 
 	private static void processFilesAndGenerateResult(BranchOrderDetails branchOrderDetailsForXML,
 			BranchOrderDetails branchOrderDetailsForJSON) {
 		ObjectMapper mapper = new ObjectMapper();
-		Result result = new Result();
 		List<BranchOrderDetails> orders = new ArrayList<BranchOrderDetails>();
 		orders.add(branchOrderDetailsForXML);
 		orders.add(branchOrderDetailsForJSON);
@@ -42,14 +44,9 @@ public class App
 			mapper.writeValue(new File("src/main/java/com/ritu/tiaa/output/mismatch.json"), processResult(orders));
 			mapper.writeValue(new File("src/main/java/com/ritu/tiaa/output/match.json"), new JSONObject());
 
-			
-
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Fatal error occured");
+
 		}
 	}
 
@@ -61,20 +58,21 @@ public class App
 			List<Order> totalOrders = order.getOrders();
 			int totalBill = 0;
 			for (Order order2 : totalOrders) {
-				totalBill = (int) (totalBill+Double.parseDouble((order2.getBillAmount().replaceAll("^\"|\"$", ""))));
+				totalBill = (int) (totalBill + Double.parseDouble((order2.getBillAmount().replaceAll("^\"|\"$", ""))));
 			}
-			
-			foodchain.addBranch(new Branch(order.getBranchLocation(), order.getTotalcollection(), String.valueOf(totalBill).concat(".00"), order.getLocationid()));
+
+			foodchain.addBranch(new Branch(order.getBranchLocation(), order.getTotalcollection(),
+					String.valueOf(totalBill).concat(".00"), order.getLocationid()));
 			result = new Result(foodchain);
 			results.add(result);
 		}
-		
+
 		return results.get(0);
 	}
 
-		public static String replace(String str) {
-			return str.replaceAll("^\"|\"$", "");
+	public static String replace(String str) {
+		return str.replaceAll("^\"|\"$", "");
 
-		}
+	}
 
 }
