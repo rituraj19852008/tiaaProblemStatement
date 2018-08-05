@@ -22,6 +22,8 @@ import com.ritu.tiaa.restaurant.XMLFiles;
 public class App {
 
 	static Logger logger = Logger.getLogger(XMLFiles.class);
+	
+	public static final String CONSTANT = "^\"|\"$";
 
 	public static void main(String[] args) {
 		Files xmlfile = new XMLFiles();
@@ -41,8 +43,8 @@ public class App {
 		orders.add(branchOrderDetailsForJSON);
 		try {
 			// Convert object to JSON string and save into a file directly
-			mapper.writeValue(new File("src/main/java/com/ritu/tiaa/output/mismatch.json"), processResult(orders));
-			mapper.writeValue(new File("src/main/java/com/ritu/tiaa/output/match.json"), new JSONObject());
+			mapper.writeValue(new File("src/main/java/com/ritu/tiaa/output/mismatch.json"), processResultForMismatch(orders));
+			mapper.writeValue(new File("src/main/java/com/ritu/tiaa/output/match.json"), processResultForMatch(orders));
 
 		} catch (IOException e) {
 			logger.error("Fatal error occured");
@@ -50,7 +52,27 @@ public class App {
 		}
 	}
 
-	private static Result processResult(List<BranchOrderDetails> orders) {
+	private static Result processResultForMatch(List<BranchOrderDetails> orders) {
+		boolean mismatch = false;
+		for (BranchOrderDetails branchOrderDetails : orders) {
+			
+			List<Order> totalOrders = branchOrderDetails.getOrders();
+			int totalBill = 0;
+			for (Order order2 : totalOrders) {
+				totalBill = (int) (totalBill + Double.parseDouble((order2.getBillAmount().replaceAll(CONSTANT, ""))));
+			}
+			if(!String.valueOf(totalBill).concat(".00").equalsIgnoreCase(branchOrderDetails.getTotalcollection())){
+				mismatch = true;
+			}
+
+		}
+		if(mismatch) {
+			return new Result();
+		}
+		return null;
+	}
+
+	private static Result processResultForMismatch(List<BranchOrderDetails> orders) {
 		List<Result> results = new ArrayList<Result>();
 		CMFoodChain foodchain = new CMFoodChain();
 		for (BranchOrderDetails order : orders) {
@@ -58,7 +80,7 @@ public class App {
 			List<Order> totalOrders = order.getOrders();
 			int totalBill = 0;
 			for (Order order2 : totalOrders) {
-				totalBill = (int) (totalBill + Double.parseDouble((order2.getBillAmount().replaceAll("^\"|\"$", ""))));
+				totalBill = (int) (totalBill + Double.parseDouble((order2.getBillAmount().replaceAll(CONSTANT, ""))));
 			}
 
 			foodchain.addBranch(new Branch(order.getBranchLocation(), order.getTotalcollection(),
@@ -71,7 +93,7 @@ public class App {
 	}
 
 	public static String replace(String str) {
-		return str.replaceAll("^\"|\"$", "");
+		return str.replaceAll(CONSTANT, "");
 
 	}
 
