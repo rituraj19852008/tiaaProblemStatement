@@ -8,8 +8,10 @@ Build IDE : Build IDE: Eclipse Java EE IDE (Version: Oxygen Release (4.7.0))
 JDK Version: java version "jdk1.8.0_171"
 
 Section 3 :
-a)	Sonar lint / EclEmma scan Snapshot 
-b)	Final Output Snapshot 
+a)	Sonar lint / EclEmma scan Snapshot  tiaaProblemStatement/images_snapshot/SonalLint_Report.PNG
+
+b)	Final Output Snapshot tiaaProblemStatement/images_snapshot/mismatch_json.PNG
+
 c)	Junit Coverage Snapshot
 
 These can be found in the images_snapshot folder
