@@ -1,18 +1,1 @@
-{
-	"cmfoodchain": {
-		"branches": [
-			{
-				"location": "\"Mumbai\"",
-				"totalcollection": "124.00",
-				"sumoforder": "132.00",
-				"locationid": "BOM-1234-456"
-			},
-			{
-				"location": "Mumbai",
-				"totalcollection": "124.00",
-				"sumoforder": "132.00",
-				"locationid": "BOM-1234-457"
-			}
-		]
-	}
-}
+{"cmfoodchain":{"branches":[{"location":"\"Mumbai\"","totalcollection":"124.00","sumoforder":"132.00","locationid":"BOM-1234-456"},{"location":"Mumbai","totalcollection":"124.00","sumoforder":"132.00","locationid":"BOM-1234-457"}]}}

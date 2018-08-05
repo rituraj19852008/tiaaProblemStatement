@@ -19,7 +19,7 @@ import com.ritu.tiaa.restaurant.XMLFiles;
  *
  */
 
-public class FinanceDepartmentValidationEngine {
+public class App {
 
 	static Logger logger = Logger.getLogger(XMLFiles.class);
 
